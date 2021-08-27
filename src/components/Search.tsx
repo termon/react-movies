@@ -1,12 +1,12 @@
-import React, { useMemo } from "react";
-import { ResetAction, SearchAction } from "./store";
+import React from "react";
+import { ResetAction, SearchAction } from "../store";
 
 interface PropTypes {
   query: string;
   search: SearchAction;
   reset: ResetAction;
 }
-export default ({ query, search, reset }: PropTypes) => {
+function Search ({ query, search, reset }: PropTypes) {
   
   return (
     <>
@@ -74,3 +74,5 @@ export default ({ query, search, reset }: PropTypes) => {
     </>
   );
 };
+
+export default Search

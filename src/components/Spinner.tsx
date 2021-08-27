@@ -1,6 +1,9 @@
 import React from 'react'
 
-function Spinner({loading} : {loading:boolean}) {
+interface PropTypes  {
+  loading: boolean
+}
+function Spinner({loading} : PropTypes) {
     
     return (
       <>

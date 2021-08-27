@@ -1,9 +1,5 @@
 import React from "react";
-import MovieList from "./MovieList";
-import MovieView from "./MovieView";
-import Paginator from "./Paginator";
-import Search from "./Search";
-import Spinner from "./Spinner";
+import { MovieList, MovieView, Paginator, Search, Spinner } from "./components";
 import { useStateHook } from "./store";
 
 function App() {

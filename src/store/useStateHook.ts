@@ -3,10 +3,10 @@
 // https://fettblog.eu/typescript-react-typeing-custom-hooks/
 
 import React, { useReducer } from 'react'
+import { SearchAction, GotoPageAction, SelectAction, ResetAction, Action } from '.';
+import { reducer, initialState } from './reducer'
 
-import { reducer, Actions, initialState, SearchAction, GotoPageAction, SelectAction, ResetAction } from './reducer'
-
-export function useStateHook() {
+function useStateHook() {
     // export the created reducer
     const [ state, dispatch ] = useReducer(reducer, initialState)
 
@@ -14,14 +14,14 @@ export function useStateHook() {
     React.useEffect(() => {
         async function fetchQuery() {
             try {
-                dispatch( { type: Actions.LOADING, payload: true })
+                dispatch( { type: Action.LOADING, payload: true })
                 const resp = await fetch(_movieQueryUrl(state.query,state.paginator.page),_getTokenObj())
                 const json = await resp.json()                
-                dispatch( { type: Actions.SET_MOVIES, payload: json.results } ); // results contains movie list 
-                dispatch( { type: Actions.PAGE, payload: { page: json.page, totalPages: json.total_pages } } ); // total_pages contains number of pages available for query
+                dispatch( { type: Action.SET_MOVIES, payload: json.results } ); // results contains movie list 
+                dispatch( { type: Action.PAGE, payload: { page: json.page, totalPages: json.total_pages } } ); // total_pages contains number of pages available for query
             } catch (error) {
                 console.log('Error', error)
-                dispatch({ type: Actions.ERROR, payload: error })
+                dispatch({ type: Action.ERROR, payload: error })
             }
         }
         if (state.query && state.query.length > 0) {
@@ -33,13 +33,13 @@ export function useStateHook() {
     React.useEffect(() => {
         async function fetchQuery() {
             try {
-                dispatch( { type: Actions.LOADING, payload: true })
+                dispatch( { type: Action.LOADING, payload: true })
                 const resp = await fetch(_movieUrl(state.movieId), _getTokenObj())
                 const json = await resp.json()               
-                dispatch( { type: Actions.SET_MOVIE, payload: json } );       
+                dispatch( { type: Action.SET_MOVIE, payload: json } );       
             } catch (error) {
                 console.log('Error', error)
-                dispatch({ type: Actions.ERROR, payload: error })
+                dispatch({ type: Action.ERROR, payload: error })
             }
         }
 
@@ -48,19 +48,21 @@ export function useStateHook() {
         }
     }, [state.movieId]) // effect triggered when movieId updated
 
-    // actions
-    const search: SearchAction     = (query:string) => dispatch( { type: Actions.QUERY, payload: query })
-    const select: SelectAction     = (id:string) => dispatch( { type: Actions.SELECT, payload: id })
-    const gotoPage: GotoPageAction = (p:number, t:number) => dispatch( { type: Actions.PAGE, payload: { page: p, totalPages: t }} )
-    const reset: ResetAction       = () => dispatch( { type: Actions.RESET } )
+    // public actions exposed by custom hook
+    const search: SearchAction     = (query:string) => dispatch( { type: Action.QUERY, payload: query })
+    const select: SelectAction     = (id:string) => dispatch( { type: Action.SELECT, payload: id })
+    const gotoPage: GotoPageAction = (p:number, t:number) => dispatch( { type: Action.PAGE, payload: { page: p, totalPages: t }} )
+    const reset: ResetAction       = () => dispatch( { type: Action.RESET } )
 
-    return [ state, { search, select, gotoPage, reset} ] as const
+    return [ state, { search, select, gotoPage, reset } ] as const
 }
 
-export function posterUrl(poster:string, size='original'):string {
+function posterUrl(poster:string, size='original'):string {
     //return path + size + poster  
     return `https://image.tmdb.org/t/p/${size}/${poster}`
 }
+
+export { useStateHook, posterUrl }
 
 // ------------------ private functions --------------------
 

@@ -1,24 +1,26 @@
 export * from './useStateHook'
 export * from './reducer'
 
-export const debounce = (func: any, wait: number) => {
-    let timeout: any;
-    // This is the function that is returned and will be executed many times
-    // We spread (...args) to capture any number of parameters we want to pass
-    return function executedFunction(...args: any[]) {
-      // The callback function to be executed after the debounce time has elapsed
-      const later = () => {
-        // null timeout to indicate the debounce ended
-        timeout = null;
-        console.log('calling func')
-        // Execute the callback
-        func(...args);
-      };
-      // This will reset the waiting every function execution. This is the step that prevents the function from
-      // being executed because it will never reach the inside of the previous setTimeout
-      clearTimeout(timeout);
+// action function types
+export type SelectAction = (id:string) => void
+export type SearchAction = (query:string) => void
+export type GotoPageAction = (page:number, total:number) => void
+export type ResetAction = () => void
 
-      // Restart the debounce waiting period. setTimeout returns a truthy value (it differs in web vs Node)
-      timeout = setTimeout(later, wait);
-    };
-  };
+// action names
+export enum Action {
+  SET_MOVIES = "SET_MOVIES",
+  SET_MOVIE  = "SET_MOVIE",
+  QUERY = "QUERY",
+  SELECT = "SELECT",
+  RESET = "RESET",
+  PAGE = "PAGE",
+  LOADING = "LOADING",
+  ERROR = "ERROR"
+}
+
+// paginator type
+export interface IPaginator {
+  page: number
+  totalPages: number
+}
