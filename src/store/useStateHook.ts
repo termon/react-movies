@@ -19,7 +19,7 @@ function useStateHook() {
                 const json = await resp.json()                
                 dispatch( { type: Action.SET_MOVIES, payload: json.results } ); // results contains movie list 
                 dispatch( { type: Action.PAGE, payload: { page: json.page, totalPages: json.total_pages } } ); // total_pages contains number of pages available for query
-            } catch (error) {
+            } catch (error:any) {
                 console.log('Error', error)
                 dispatch({ type: Action.ERROR, payload: error })
             }
@@ -37,7 +37,7 @@ function useStateHook() {
                 const resp = await fetch(_movieUrl(state.movieId), _getTokenObj())
                 const json = await resp.json()               
                 dispatch( { type: Action.SET_MOVIE, payload: json } );       
-            } catch (error) {
+            } catch (error:any) {
                 console.log('Error', error)
                 dispatch({ type: Action.ERROR, payload: error })
             }

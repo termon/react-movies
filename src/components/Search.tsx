@@ -15,7 +15,7 @@ function Search ({ query, search, reset }: PropTypes) {
           className="col-10 form-input"
           value={query}
           placeholder="search...."
-          onChange={ (e) => search(e.target.value) }   
+          onChange={ (e) => search(e.target.value) }   /** really should be debounced **/
         />
         <button
           type="reset"
